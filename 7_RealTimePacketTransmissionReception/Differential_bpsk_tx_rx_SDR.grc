@@ -53,7 +53,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [-8, 348.0]
+    coordinate: [16, 301]
     rotation: 0
     state: enabled
 - name: variable_constellation_1
@@ -91,7 +91,7 @@ blocks:
     bus_structure: null
     coordinate: [1256, 308.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_file_sink_0_0_0
   id: blocks_file_sink
   parameters:
@@ -99,7 +99,7 @@ blocks:
     alias: ''
     append: 'False'
     comment: ''
-    file: /home/moazzam/Downloads/out.txt
+    file: /home/pentoo/Desktop/gnuRadioTutorials/7_RealTimePacketTransmissionReception/output.txt
     type: byte
     unbuffered: 'False'
     vlen: '1'
@@ -117,7 +117,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /media/moazzam/F68AF4398AF3F449/Udemy Trainings/Software Defined Radio/course/test.txt
+    file: /home/pentoo/Desktop/gnuRadioTutorials/5_imparmentsOfWireless/test.txt
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -149,7 +149,7 @@ blocks:
     bus_structure: null
     coordinate: [1128, 32.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_repack_bits_bb_0_0_0
   id: blocks_repack_bits_bb
   parameters:
@@ -222,7 +222,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [968, 656.0]
+    coordinate: [951, 657]
     rotation: 0
     state: enabled
 - name: digital_constellation_decoder_cb_1_0
@@ -238,7 +238,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [704, 560.0]
+    coordinate: [740, 560]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0_0
@@ -248,7 +248,7 @@ blocks:
     alias: ''
     comment: ''
     constellation: variable_constellation_1
-    differential: 'True'
+    differential: 'False'
     excess_bw: '0.35'
     log: 'False'
     maxoutbuf: '0'
@@ -312,7 +312,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1000, 600.0]
+    coordinate: [958, 574]
     rotation: 0
     state: enabled
 - name: digital_lms_dd_equalizer_cc_0
@@ -933,6 +933,98 @@ blocks:
     coordinate: [360, 768.0]
     rotation: 0
     state: true
+- name: qtgui_const_sink_x_0_0_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"red"'
+    color2: '"red"'
+    color3: '"red"'
+    color4: '"red"'
+    color5: '"red"'
+    color6: '"red"'
+    color7: '"red"'
+    color8: '"red"'
+    color9: '"red"'
+    comment: ''
+    grid: 'False'
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '""'
+    nconnections: '1'
+    size: '1024'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1214, 231]
+    rotation: 0
+    state: true
 - name: uhd_usrp_sink_0
   id: uhd_usrp_sink
   parameters:
@@ -1208,10 +1300,11 @@ blocks:
     bus_structure: null
     coordinate: [1176, 104.0]
     rotation: 0
-    state: enabled
+    state: disabled
 
 connections:
 - [blocks_file_source_0, '0', blocks_stream_to_tagged_stream_0, '0']
+- [blocks_multiply_const_vxx_0, '0', qtgui_const_sink_x_0_0_0, '0']
 - [blocks_multiply_const_vxx_0, '0', uhd_usrp_sink_0, '0']
 - [blocks_repack_bits_bb_0_0_0, '0', blocks_file_sink_0_0, '0']
 - [blocks_repack_bits_bb_0_0_0, '0', blocks_file_sink_0_0_0, '0']
@@ -1221,6 +1314,7 @@ connections:
 - [blocks_unpack_k_bits_bb_0_0_0, '0', digital_correlate_access_code_xx_ts_1, '0']
 - [digital_constellation_decoder_cb_1_0, '0', digital_diff_decoder_bb_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_multiply_const_vxx_0, '0']
+- [digital_constellation_modulator_0_0, '0', qtgui_const_sink_x_0_0_0, '0']
 - [digital_correlate_access_code_xx_ts_1, '0', blocks_repack_bits_bb_0_0_0, '0']
 - [digital_costas_loop_cc_2_0, '0', digital_lms_dd_equalizer_cc_0, '0']
 - [digital_diff_decoder_bb_0, '0', blocks_unpack_k_bits_bb_0_0_0, '0']
