@@ -1,7 +1,8 @@
 Looks like Ubuntu has a process claiming the RTL-SDR:
 can verify this by running th following command:
 sudo rmmod dvb_usb_rtl28xxu
-and see if it works. It it does, then you can make the change permanent (after reboot) by creating "rtlsdr.conf" in "/etc/modprobe.d" and put 
+and see if it works. It it does,
+then you can make the change permanent (after reboot) by creating "rtlsdr.conf" in "/etc/modprobe.d" and put 
 blacklist dvb_usb_rtl28xxu
 
 

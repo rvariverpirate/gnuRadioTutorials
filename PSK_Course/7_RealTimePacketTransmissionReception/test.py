@@ -26,15 +26,16 @@ from gnuradio import qtgui
 import sip
 from gnuradio import blocks
 import pmt
-from gnuradio import channels
-from gnuradio.filter import firdes
 from gnuradio import digital
 from gnuradio import gr
+from gnuradio.filter import firdes
 import sys
 import signal
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+import osmosdr
+import time
 
 from gnuradio import qtgui
 
@@ -80,23 +81,102 @@ class test(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.variable_constellation_1 = variable_constellation_1 = digital.constellation_bpsk().base()
-        self.taps = taps = [1.0, 0.25-0.25j, 0.50 + 0.10j, -0.3 + 0.2j]
         self.sps = sps = 4
         self.nfilts = nfilts = 32
 
         ##################################################
         # Blocks
         ##################################################
+        self.qtgui_const_sink_x_0_2 = qtgui.const_sink_c(
+            1024, #size
+            'RTL-Polyphase Clock Sync', #name
+            1 #number of inputs
+        )
+        self.qtgui_const_sink_x_0_2.set_update_time(0.10)
+        self.qtgui_const_sink_x_0_2.set_y_axis(-2, 2)
+        self.qtgui_const_sink_x_0_2.set_x_axis(-2, 2)
+        self.qtgui_const_sink_x_0_2.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
+        self.qtgui_const_sink_x_0_2.enable_autoscale(False)
+        self.qtgui_const_sink_x_0_2.enable_grid(False)
+        self.qtgui_const_sink_x_0_2.enable_axis_labels(True)
+
+
+        labels = ['', '', '', '', '',
+            '', '', '', '', '']
+        widths = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        colors = ["blue", "red", "red", "red", "red",
+            "red", "red", "red", "red", "red"]
+        styles = [0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0]
+        markers = [0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0]
+
+        for i in range(1):
+            if len(labels[i]) == 0:
+                self.qtgui_const_sink_x_0_2.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_const_sink_x_0_2.set_line_label(i, labels[i])
+            self.qtgui_const_sink_x_0_2.set_line_width(i, widths[i])
+            self.qtgui_const_sink_x_0_2.set_line_color(i, colors[i])
+            self.qtgui_const_sink_x_0_2.set_line_style(i, styles[i])
+            self.qtgui_const_sink_x_0_2.set_line_marker(i, markers[i])
+            self.qtgui_const_sink_x_0_2.set_line_alpha(i, alphas[i])
+
+        self._qtgui_const_sink_x_0_2_win = sip.wrapinstance(self.qtgui_const_sink_x_0_2.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._qtgui_const_sink_x_0_2_win)
+        self.qtgui_const_sink_x_0_1 = qtgui.const_sink_c(
+            1024, #size
+            'Hackrf', #name
+            1 #number of inputs
+        )
+        self.qtgui_const_sink_x_0_1.set_update_time(0.10)
+        self.qtgui_const_sink_x_0_1.set_y_axis(-2, 2)
+        self.qtgui_const_sink_x_0_1.set_x_axis(-2, 2)
+        self.qtgui_const_sink_x_0_1.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
+        self.qtgui_const_sink_x_0_1.enable_autoscale(False)
+        self.qtgui_const_sink_x_0_1.enable_grid(False)
+        self.qtgui_const_sink_x_0_1.enable_axis_labels(True)
+
+
+        labels = ['', '', '', '', '',
+            '', '', '', '', '']
+        widths = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        colors = ["blue", "red", "red", "red", "red",
+            "red", "red", "red", "red", "red"]
+        styles = [0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0]
+        markers = [0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0]
+
+        for i in range(1):
+            if len(labels[i]) == 0:
+                self.qtgui_const_sink_x_0_1.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_const_sink_x_0_1.set_line_label(i, labels[i])
+            self.qtgui_const_sink_x_0_1.set_line_width(i, widths[i])
+            self.qtgui_const_sink_x_0_1.set_line_color(i, colors[i])
+            self.qtgui_const_sink_x_0_1.set_line_style(i, styles[i])
+            self.qtgui_const_sink_x_0_1.set_line_marker(i, markers[i])
+            self.qtgui_const_sink_x_0_1.set_line_alpha(i, alphas[i])
+
+        self._qtgui_const_sink_x_0_1_win = sip.wrapinstance(self.qtgui_const_sink_x_0_1.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._qtgui_const_sink_x_0_1_win)
         self.qtgui_const_sink_x_0_0 = qtgui.const_sink_c(
             1024, #size
-            "", #name
+            'RTL-Raw', #name
             1 #number of inputs
         )
         self.qtgui_const_sink_x_0_0.set_update_time(0.10)
         self.qtgui_const_sink_x_0_0.set_y_axis(-2, 2)
         self.qtgui_const_sink_x_0_0.set_x_axis(-2, 2)
         self.qtgui_const_sink_x_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
-        self.qtgui_const_sink_x_0_0.enable_autoscale(True)
+        self.qtgui_const_sink_x_0_0.enable_autoscale(False)
         self.qtgui_const_sink_x_0_0.enable_grid(False)
         self.qtgui_const_sink_x_0_0.enable_axis_labels(True)
 
@@ -129,14 +209,14 @@ class test(gr.top_block, Qt.QWidget):
         self.top_grid_layout.addWidget(self._qtgui_const_sink_x_0_0_win)
         self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
             1024, #size
-            "", #name
+            'Equalizer', #name
             1 #number of inputs
         )
         self.qtgui_const_sink_x_0.set_update_time(0.10)
         self.qtgui_const_sink_x_0.set_y_axis(-2, 2)
         self.qtgui_const_sink_x_0.set_x_axis(-2, 2)
         self.qtgui_const_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
-        self.qtgui_const_sink_x_0.enable_autoscale(True)
+        self.qtgui_const_sink_x_0.enable_autoscale(False)
         self.qtgui_const_sink_x_0.enable_grid(False)
         self.qtgui_const_sink_x_0.enable_axis_labels(True)
 
@@ -167,35 +247,57 @@ class test(gr.top_block, Qt.QWidget):
 
         self._qtgui_const_sink_x_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0.pyqwidget(), Qt.QWidget)
         self.top_grid_layout.addWidget(self._qtgui_const_sink_x_0_win)
+        self.osmosdr_source_0_0 = osmosdr.source(
+            args="numchan=" + str(1) + " " + ''
+        )
+        self.osmosdr_source_0_0.set_sample_rate(2000000)
+        self.osmosdr_source_0_0.set_center_freq(27e6, 0)
+        self.osmosdr_source_0_0.set_freq_corr(0, 0)
+        self.osmosdr_source_0_0.set_dc_offset_mode(0, 0)
+        self.osmosdr_source_0_0.set_iq_balance_mode(0, 0)
+        self.osmosdr_source_0_0.set_gain_mode(False, 0)
+        self.osmosdr_source_0_0.set_gain(0, 0)
+        self.osmosdr_source_0_0.set_if_gain(24, 0)
+        self.osmosdr_source_0_0.set_bb_gain(24, 0)
+        self.osmosdr_source_0_0.set_antenna('', 0)
+        self.osmosdr_source_0_0.set_bandwidth(0, 0)
+        self.osmosdr_sink_0 = osmosdr.sink(
+            args="numchan=" + str(1) + " " + ''
+        )
+        self.osmosdr_sink_0.set_sample_rate(2000000)
+        self.osmosdr_sink_0.set_center_freq(27000000, 0)
+        self.osmosdr_sink_0.set_freq_corr(0, 0)
+        self.osmosdr_sink_0.set_gain(0, 0)
+        self.osmosdr_sink_0.set_if_gain(47, 0)
+        self.osmosdr_sink_0.set_bb_gain(20, 0)
+        self.osmosdr_sink_0.set_antenna('', 0)
+        self.osmosdr_sink_0.set_bandwidth(0, 0)
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(hdr_format, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(4, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
         self.digital_lms_dd_equalizer_cc_0 = digital.lms_dd_equalizer_cc(15, 0.01, 1, variable_constellation_1)
-        self.digital_costas_loop_cc_2_0 = digital.costas_loop_cc(0.0628, 4, True)
+        self.digital_diff_decoder_bb_0 = digital.diff_decoder_bb(2)
+        self.digital_costas_loop_cc_2_0 = digital.costas_loop_cc(0.0628, 2, True)
         self.digital_correlate_access_code_xx_ts_1 = digital.correlate_access_code_bb_ts(digital.packet_utils.default_access_code,
           0, "packet_len")
         self.digital_constellation_modulator_0_0 = digital.generic_mod(
             constellation=variable_constellation_1,
-            differential=False,
+            differential=True,
             samples_per_symbol=4,
             pre_diff_code=True,
             excess_bw=0.35,
             verbose=False,
             log=False)
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(variable_constellation_1)
-        self.channels_channel_model_0 = channels.channel_model(
-            noise_voltage=1*1000*0.000100,
-            frequency_offset=1*20*0.000000005,
-            epsilon=1,
-            taps=taps,
-            noise_seed=0,
-            block_tags=False)
-        self.blocks_unpack_k_bits_bb_0_0_0 = blocks.unpack_k_bits_bb(2)
+        self.blocks_unpack_k_bits_bb_0_0_0 = blocks.unpack_k_bits_bb(1)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
         self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
         self.blocks_repack_bits_bb_0_0_0 = blocks.repack_bits_bb(1, 8, "packet_len", False, gr.GR_MSB_FIRST)
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, '/home/pentoo/Desktop/gnuRadioTutorials/5_imparmentsOfWireless/test.txt', True, 0, 0)
+        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_cc(4)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, '/root/Desktop/gnuRadioTutorials/5_imparmentsOfWireless/test.txt', True, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
-        self.blocks_file_sink_0_0 = blocks.file_sink(gr.sizeof_char*1, '/dev/pts/2', False)
+        self.blocks_file_sink_0_0_0 = blocks.file_sink(gr.sizeof_char*1, '/root/Desktop/gnuRadioTutorials/7_RealTimePacketTransmissionReception/output.txt', False)
+        self.blocks_file_sink_0_0_0.set_unbuffered(False)
+        self.blocks_file_sink_0_0 = blocks.file_sink(gr.sizeof_char*1, '/dev/pts/1', False)
         self.blocks_file_sink_0_0.set_unbuffered(False)
 
 
@@ -204,21 +306,26 @@ class test(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.connect((self.blocks_file_source_0, 0), (self.blocks_stream_to_tagged_stream_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.digital_lms_dd_equalizer_cc_0, 0))
         self.connect((self.blocks_repack_bits_bb_0_0_0, 0), (self.blocks_file_sink_0_0, 0))
+        self.connect((self.blocks_repack_bits_bb_0_0_0, 0), (self.blocks_file_sink_0_0_0, 0))
         self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.blocks_tagged_stream_mux_0, 1))
         self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0_0, 0))
         self.connect((self.blocks_unpack_k_bits_bb_0_0_0, 0), (self.digital_correlate_access_code_xx_ts_1, 0))
-        self.connect((self.channels_channel_model_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
-        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_unpack_k_bits_bb_0_0_0, 0))
-        self.connect((self.digital_constellation_modulator_0_0, 0), (self.channels_channel_model_0, 0))
-        self.connect((self.digital_constellation_modulator_0_0, 0), (self.qtgui_const_sink_x_0_0, 0))
+        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.digital_diff_decoder_bb_0, 0))
+        self.connect((self.digital_constellation_modulator_0_0, 0), (self.osmosdr_sink_0, 0))
+        self.connect((self.digital_constellation_modulator_0_0, 0), (self.qtgui_const_sink_x_0_1, 0))
         self.connect((self.digital_correlate_access_code_xx_ts_1, 0), (self.blocks_repack_bits_bb_0_0_0, 0))
-        self.connect((self.digital_costas_loop_cc_2_0, 0), (self.digital_lms_dd_equalizer_cc_0, 0))
+        self.connect((self.digital_costas_loop_cc_2_0, 0), (self.blocks_multiply_const_vxx_0_0, 0))
+        self.connect((self.digital_diff_decoder_bb_0, 0), (self.blocks_unpack_k_bits_bb_0_0_0, 0))
         self.connect((self.digital_lms_dd_equalizer_cc_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
         self.connect((self.digital_lms_dd_equalizer_cc_0, 0), (self.qtgui_const_sink_x_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_costas_loop_cc_2_0, 0))
+        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_const_sink_x_0_2, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
+        self.connect((self.osmosdr_source_0_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
+        self.connect((self.osmosdr_source_0_0, 0), (self.qtgui_const_sink_x_0_0, 0))
 
 
     def closeEvent(self, event):
@@ -237,13 +344,6 @@ class test(gr.top_block, Qt.QWidget):
 
     def set_variable_constellation_1(self, variable_constellation_1):
         self.variable_constellation_1 = variable_constellation_1
-
-    def get_taps(self):
-        return self.taps
-
-    def set_taps(self, taps):
-        self.taps = taps
-        self.channels_channel_model_0.set_taps(self.taps)
 
     def get_sps(self):
         return self.sps

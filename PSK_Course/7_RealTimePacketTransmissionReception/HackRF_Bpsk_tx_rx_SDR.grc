@@ -81,7 +81,7 @@ blocks:
     alias: ''
     append: 'False'
     comment: ''
-    file: /dev/pts/2
+    file: /dev/pts/1
     type: byte
     unbuffered: 'False'
     vlen: '1'
@@ -99,7 +99,7 @@ blocks:
     alias: ''
     append: 'False'
     comment: ''
-    file: /home/pentoo/Desktop/gnuRadioTutorials/7_RealTimePacketTransmissionReception/output.txt
+    file: /root/Desktop/gnuRadioTutorials/7_RealTimePacketTransmissionReception/output.txt
     type: byte
     unbuffered: 'False'
     vlen: '1'
@@ -117,7 +117,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /home/pentoo/Desktop/gnuRadioTutorials/5_imparmentsOfWireless/test.txt
+    file: /root/Desktop/gnuRadioTutorials/5_imparmentsOfWireless/test.txt
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'

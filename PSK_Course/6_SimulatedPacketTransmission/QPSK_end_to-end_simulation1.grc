@@ -123,7 +123,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /home/pentoo/Desktop/gnuRadioTutorials/5_imparmentsOfWireless/test.txt
+    file: /root/Desktop/gnuRadioTutorials/5_imparmentsOfWireless/test.txt
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
